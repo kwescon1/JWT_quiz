@@ -1,6 +1,7 @@
-export function responseMacro(req, res, next) {
+function responseMacro(req, res, next) {
   res.success = (data, message = "") => {
     return res.status(200).json({
+      message,
       data: data ?? null,
     });
   };
@@ -32,3 +33,5 @@ export function responseMacro(req, res, next) {
 
   next();
 }
+
+module.exports = responseMacro;
