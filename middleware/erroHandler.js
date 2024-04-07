@@ -1,23 +1,19 @@
-// Import the logge
 const handleError = (err, req, res, next) => {
-  // Extract useful error information
-  const errorInfo = {
-    method: req.method,
-    url: req.originalUrl,
-    ip: req.ip,
-    error: err.message,
-    stack: err.stack,
-  };
+  // Respond based on the type of error
+  if (err.type) {
+    switch (err.type) {
+      case "NotFound":
+        res.notFound(err.message);
+        break;
 
-  // Switch case on the error type
-  switch (err.constructor.name) {
-    case "NotFoundException":
-      res.notFound("Resource Not Found");
-      break;
-    // Add more cases as needed for other custom errors
-    default:
-      // Handle unexpected errors
-      res.error("Internal Server Error");
+      default:
+        // Default to internal server error if error type is unrecognized
+        res.error("Internal Server Error");
+        break;
+    }
+  } else {
+    // If error does not specify a type, treat as internal server error
+    res.error("Internal Server Error");
   }
 };
 
